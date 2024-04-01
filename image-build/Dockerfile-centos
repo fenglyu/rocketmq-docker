@@ -28,11 +28,17 @@ RUN set -eux \
     && yum -y install curl gnupg unzip \
     && yum clean all -y
 
-RUN curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip \
-    && curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc \
-	&& curl -L https://www.apache.org/dist/rocketmq/KEYS -o KEYS \
+RUN curl -L https://dist.apache.org/repos/dist/release/rocketmq//5.2.0/rocketmq-all-5.2.0-bin-release.zip -o rocketmq.zip \
+    && curl -L https://dist.apache.org/repos/dist/release/rocketmq//5.2.0/rocketmq-all-5.2.0-bin-release.zip.asc -o rocketmq.zip.asc \
+    && curl -L https://www.apache.org/dist/rocketmq/KEYS -o KEYS \
     && gpg --import KEYS \
     && gpg --batch --verify rocketmq.zip.asc rocketmq.zip
+
+#RUN curl -L https://dist.apache.org/repos/dist/release/rocketmq//${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip; \
+#  &&   curl -L https://dist.apache.org/repos/dist/release/rocketmq//${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc; \
+#	&& curl -L https://www.apache.org/dist/rocketmq/KEYS -o KEYS \
+#    && gpg --import KEYS \
+#    && gpg --batch --verify rocketmq.zip.asc rocketmq.zip
 
 RUN unzip rocketmq.zip \
     && mkdir -p /tmp/rocketmq-${version} \

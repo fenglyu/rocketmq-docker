@@ -19,15 +19,18 @@
 # Build stage 1 `builder`:
 # Download and extract RocketMQ
 ################################################################################
-FROM eclipse-temurin:8-jdk-alpine AS builder
+FROM eclipse-temurin:21-alpine AS builder
+#FROM eclipse-temurin:8-jdk-alpine AS builder
 
 ARG version
 
 RUN set -eux; \
     apk add --virtual .build-deps curl gnupg unzip;
 
-RUN curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip; \
-    curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc; \
+#RUN curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip; \
+#    curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc; \
+RUN curl -L https://dist.apache.org/repos/dist/release/rocketmq//${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip; \
+    curl -L https://dist.apache.org/repos/dist/release/rocketmq//${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc; \
 	curl -L https://www.apache.org/dist/rocketmq/KEYS -o KEYS; \
 	gpg --import KEYS; \
     gpg --batch --verify rocketmq.zip.asc rocketmq.zip;
@@ -41,8 +44,9 @@ RUN unzip rocketmq.zip; \
 # Build stage 2:
 # Make the actual RocketMQ docker image
 ################################################################################
-FROM eclipse-temurin:8-jdk-alpine
 
+FROM eclipse-temurin:21-alpine
+#FROM eclipse-temurin:8-jdk-alpine
 ARG user=rocketmq
 ARG group=rocketmq
 ARG uid=3000
